@@ -1,0 +1,15 @@
+name: Refresh Shootout Data
+
+on:
+  schedule:
+    - cron: '0 11 * * *'   # daily at 11:00 UTC (~7am ET)
+  workflow_dispatch: {}     # lets you also trigger it manually from the Actions tab
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call shootout refresh endpoint
+        run: |
+          curl -sf -u "${{ secrets.SHOOTOUT_ADMIN_USER }}:${{ secrets.SHOOTOUT_ADMIN_PASS }}" \
+            -X POST "https://coaches-station-api.fly.dev/api/shootout/refresh?max_new_games=60"
